@@ -16,18 +16,16 @@
  * character, print an error message and return the value 1.
  *
  * Then, prompt the user for a string of plaintext. Return another string, 
- * which is that same string shifted by k. Then exit.
+ * which is that same string shifted by each successive character in argv[1]. 
+ * Then exit.
  *
  * Preserve case, and just shift letters
- *
- * if p is some plaintext (i.e., an unencrypted message), p(i) is the (i)th 
- * character in p, and k is a secret key (i.e., a non-negative integer), then 
- * each letter, c(i), in the ciphertext, c, is computed as:
- * c(i) = (p(i) + k) % 26
  */
 
 int main(int argc, string argv[])
 {
+    // test the first requirement of the input string: that there be just one
+    // i had fun making the error messaging seem like a regular command's
     if (argc == 1)
     {
         printf("%s: missing key operand\n", argv[0]);
@@ -40,18 +38,23 @@ int main(int argc, string argv[])
         printf("Try %s --help for more information.\n", argv[0]);
         return 1;
     }
-
-    // how can i tell if the user did not input an actual number for the 
-    // argument? it converts non-integers to 0. i'm leaving this for later
-
-    // convert the commandline argument (a string) to an int
-    int k = atoi(argv[1]);
-
-    // reduce the key down to between 0 and 25
-    if (k > 25)
+    
+    // go through each character of argv[1] and test each one to make sure
+    // it's an alphabetical character
+    string m = argv[1];
+    if (m != NULL )
     {
-        k %= 26;
+        int n = strlen(m);
+        for (int i = 0; i < n; i++)
+        {
+            if (!isalpha (m[i]))
+            {
+                printf("Non-alphabetical character in input \"%s\"\n", m);
+                return 1;
+            }
+        }
     }
+    
 
     string phrase;
     
@@ -63,7 +66,24 @@ int main(int argc, string argv[])
     // repeat if nothing is entered
     while (phrase[0] == '\0');
     
+    
+    
+    printf("Take \"%s\" and modify it with \"%s\"\n", phrase, argv[1]);
+    
+    /*
+    // this is from caesar.c
+    // convert the commandline argument (a string) to an int
+    int k = atoi(argv[1]);
 
+    // reduce the key down to between 0 and 25
+    if (k > 25)
+    {
+        k %= 26;
+    }
+    */
+
+    
+/*
     if (phrase != NULL)
     {
         int n = strlen(phrase);
@@ -83,6 +103,7 @@ int main(int argc, string argv[])
         }
         printf("%s\n", phrase);
     }
+   */
         
     return 0;
 
