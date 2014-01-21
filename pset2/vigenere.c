@@ -39,6 +39,8 @@ int main(int argc, string argv[])
         return 1;
     }
 
+    // now that we have the right number of arguments, assign argv[1] to a
+    // variable so we don't have to reference the array every time 
     string key = argv[1];
  
     // test if the key comes back NULL, exit if so
@@ -48,10 +50,9 @@ int main(int argc, string argv[])
         return 1;
     }
  
-    // go through each character of argv[1] and test each one to make sure
+    // go through each character of key and test each one to make sure
     // it's an alphabetical character; if one fails, exit
-    int keylen = strlen(key);
-    for (int i = 0; i < keylen; i++)
+    for (int i = 0; i < (strlen(key)); i++)
     {
         if (!isalpha (key[i]))
         {
@@ -59,17 +60,6 @@ int main(int argc, string argv[])
             return 1;
         }
     }
-
-
-/*
-    // go through each character of key and convert it to a number
-
-        for (int i = 0; i < n; i++)
-        {
-            printf("%c becomes %d\n", key[i], (int)key[i]);
-        }
-*/
-
 
     // "phrase" will contain the user's input
     string phrase;
@@ -81,28 +71,18 @@ int main(int argc, string argv[])
     }
     // repeat if nothing is entered
     while (phrase[0] == '\0');
-    
-    // printf("Take \"%s\" and modify it with \"%s\"\n", phrase, key);
-    
-    // run through the phrase string
-    // p is our counter for the key position
-    // when p gets to be the length of the key string (minus the null end 
-    // character), reset it to zero
-    int p = 0;
-    int n = strlen(phrase);
-    for (int i = 0; i < n; i++)
-    {
-        // first, just print the key letters over and over along with the
-        // phrase letters
-        // printf("%c %c\n", key[p], phrase[i]);
         
+    // run through the phrase string; p is our counter for the key position
+    int p = 0;
+    for (int i = 0; i < (strlen(phrase)); i++)
+    {        
         // only encode letters, and don't increment along the key for 
-        // non-shifted characters
+        // non-shifted characters (key increment is inside this conditional)
         if (isalpha (phrase[i]))
         {
-            // figure out how far to shift
+            // assign letter from key to an int; use it to calculate how much 
+            // to shift the character from the passphrase
             int k = key[p];
-            
             
             if (isupper (key[p]))
             {
@@ -115,29 +95,22 @@ int main(int argc, string argv[])
                 k -= 97;
             }
             
+            // handle wrapping around the alphabet
             if (((isupper (phrase[i])) && ((phrase[i] + k) > 90)) 
-            ||  ((islower (phrase[i])) && ((phrase[i] + k) > 122)))
+            || ((islower (phrase[i])) && ((phrase[i] + k) > 122)))
             {
-                phrase[i] -=26;
+                phrase[i] -= 26;
             }
             
-            // printf("key: %d %d  ", ((int)key[p]), k);
-            // printf("phr: %d %c", (int)phrase[i], phrase[i]);
-
+            // add the (possibly modified) shift value to the (possibly
+            // modified) character in the phrase
             phrase[i] += k;
-            // printf(" %c\n", phrase[i]);
-                
-            if (p == (keylen - 1))
-            {
-                p = 0;
-            }
-            else
-            {
-                p += 1;
-            }
+            
+            // now increment the key counter, but flip around if we get past
+            // the length of the key
+            p = ((p + 1) % (strlen(key)));
         }
     }
-    
     
     printf("%s\n", phrase);
 
