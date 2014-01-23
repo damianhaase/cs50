@@ -25,18 +25,22 @@
     printf("Enter card number:\n");
     input = GetLongLong();
     
-    //int len = (sizeof(input) / sizeof(int));
-    
-    int b = sizeof(input);
-    printf("input is %d big\n", b);    
-    
-    int a = sizeof(int);
-    printf("int is %d big\n", a);
-    
-    printf("%lld\n", input);
-    // printf("%d digits\n", len);
+    // just repeat input
+    // printf("%lld\n", input);
 
     // first need to check that it's between 13 and 16 digits
+    
+    long long min = 1000000000000;
+    long long max = 9999999999999999;
+    
+    if (input < min || input > max)
+    {
+        printf("boo!\n");
+    }
+    
+    string numstring = (string)input;
+    
+    printf("%s as a string!\n", numstring);
  
  
  // checksum: multiply every other digit by two, starting with the 
